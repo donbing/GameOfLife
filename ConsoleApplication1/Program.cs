@@ -74,17 +74,18 @@ namespace ConsoleApplication1
 			var sNotPressed = true;
 			while (sNotPressed) {
 				var inputValue = Console.ReadLine ();
-				if (inputValue.ToLower() == "o") {
-					return generateLiveCells ();
-				}
-				else
-					if (inputValue.ToLower() == "s") {
+
+				switch (inputValue.ToLower()) {
+					case "o":
+						return generateLiveCells ();
+					case "s":
 						sNotPressed = false;
-					}
-					else {
+						break;
+					default:
 						var coordinatePair = CreatePositionFromCrappyUserKeyedInput (inputValue);
 						allCoordinates.Add (coordinatePair);
-					}
+						break;
+				}
 			}
 
 			return allCoordinates;
