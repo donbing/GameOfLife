@@ -23,8 +23,9 @@ namespace ConsoleApplication1
 
         static List<List<int>> generateLiveCells()
         {
-			var selectedOption = GetMainMenuUserSelection ();
+			DisplayMainMenu ();
 
+			var selectedOption = Console.ReadKey ();
             if (selectedOption.Key == ConsoleKey.D1)
 				return AddRandomNumberOfRandomlyPositionedCells ();
             
@@ -34,7 +35,7 @@ namespace ConsoleApplication1
 			return new List<List<int>>();
         }
 
-		static ConsoleKeyInfo GetMainMenuUserSelection ()
+		static void DisplayMainMenu ()
 		{
 			Console.Clear ();
 			var builder = new StringBuilder ();
@@ -44,8 +45,6 @@ namespace ConsoleApplication1
 				.AppendLine ("Press 2 to enter live cells");
 			
 			Console.WriteLine (builder);
-
-			return Console.ReadKey ();
 		}
 
 		static List<List<int>> AddRandomNumberOfRandomlyPositionedCells ()
