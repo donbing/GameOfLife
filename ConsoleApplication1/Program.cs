@@ -38,16 +38,7 @@ namespace ConsoleApplication1
             var selectedOption = Console.ReadKey();
             if (selectedOption.Key == ConsoleKey.D1)
             {
-                var numberOfLiveCells = random.Next(40, 50);
-
-                for (var count = 0; count <= numberOfLiveCells; count++)
-                {
-                    var yCoordinate = random.Next(80);
-                    var xCoordinate = random.Next(40);
-
-                    var coordinatePair = new List<int> { yCoordinate, xCoordinate };
-                    allCoordinates.Add(coordinatePair);
-                }
+				AddRandomNumberOfRandomlyPositionedCells (allCoordinates);
             }                
             else if (selectedOption.Key == ConsoleKey.D2)
             {
@@ -81,5 +72,19 @@ namespace ConsoleApplication1
             }
             return allCoordinates;
         }
+
+		static void AddRandomNumberOfRandomlyPositionedCells (List<List<int>> allCoordinates)
+		{
+			var numberOfLiveCells = random.Next (40, 50);
+			for (var count = 0; count <= numberOfLiveCells; count++) {
+				var yCoordinate = random.Next (80);
+				var xCoordinate = random.Next (40);
+				var coordinatePair = new List<int> {
+					yCoordinate,
+					xCoordinate
+				};
+				allCoordinates.Add (coordinatePair);
+			}
+		}
     }
 }
