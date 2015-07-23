@@ -70,6 +70,7 @@ namespace ConsoleApplication1
 			Console.Clear ();
 			Console.WriteLine ("Enter co ordinates of cells with X and Y values seperated by a comma, press s to finish!");
 			Console.WriteLine ("Press o to return to Options");
+
 			var sNotPressed = true;
 			while (sNotPressed) {
 				var inputValue = Console.ReadLine ();
@@ -85,6 +86,7 @@ namespace ConsoleApplication1
 						allCoordinates.Add (coordinatePair);
 					}
 			}
+
 			return allCoordinates;
 		}
 
