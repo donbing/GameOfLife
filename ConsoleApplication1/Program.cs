@@ -83,7 +83,6 @@ namespace ConsoleApplication1
 					else {
 						var coordinatePair = CreatePositionFromCrappyUserKeyedInput (inputValue);
 						allCoordinates.Add (coordinatePair);
-						return allCoordinates;
 					}
 			}
 			return allCoordinates;
