@@ -83,9 +83,7 @@ namespace ConsoleApplication1
 					else {
 						var cleansedInput = new string (inputValue.Where (character => char.IsNumber (character) || character == ',').ToArray ());
 						var commaSeperatedInput = cleansedInput.Split (',');
-						var xCoordinate = int.Parse (commaSeperatedInput [0]);
-						var yCoordinate = int.Parse (commaSeperatedInput [1]);
-						var coordinatePair = CreatePosition (yCoordinate, xCoordinate);
+						var coordinatePair = CreatePositionFrom (commaSeperatedInput[0],commaSeperatedInput[1]);
 						allCoordinates.Add (coordinatePair);
 						return allCoordinates;
 					}
@@ -99,6 +97,13 @@ namespace ConsoleApplication1
 				yCoordinate,
 				xCoordinate
 			};
+		}
+
+		static List<int> CreatePositionFrom (string xCoord, string yCoord)
+		{
+			var xCoordinate = int.Parse (xCoord);
+			var yCoordinate = int.Parse (yCoord);
+			return CreatePosition (yCoordinate, xCoordinate);
 		}
     }
 }
