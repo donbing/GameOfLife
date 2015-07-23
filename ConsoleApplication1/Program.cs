@@ -26,11 +26,11 @@ namespace ConsoleApplication1
         {
             Console.Clear();
             var builder = new StringBuilder();
-            builder.AppendLine("Options")
-                   .AppendLine("Press 1 for a randomly generated game")
-                   .AppendLine("Press 2 to enter live cells");
-
-            Console.WriteLine("Welcome to the Game of Life!");
+			builder.AppendLine("Welcome to the Game of Life!")
+				.AppendLine("Options")
+				.AppendLine("Press 1 for a randomly generated game")
+				.AppendLine("Press 2 to enter live cells");
+			
             Console.WriteLine(builder);
 
             var allCoordinates = new List<List<int>>();
@@ -39,8 +39,9 @@ namespace ConsoleApplication1
             if (selectedOption.Key == ConsoleKey.D1)
             {
 				AddRandomNumberOfRandomlyPositionedCells (allCoordinates);
+				return allCoordinates;
             }                
-            else if (selectedOption.Key == ConsoleKey.D2)
+            if (selectedOption.Key == ConsoleKey.D2)
             {
                 Console.Clear();
                 Console.WriteLine("Enter co ordinates of cells with X and Y values seperated by a comma, press s to finish!");
