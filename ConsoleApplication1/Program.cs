@@ -23,7 +23,12 @@ namespace ConsoleApplication1
 
         static List<List<int>> generateLiveCells()
         {
-			DisplayMainMenu ();
+			DisplayMenu (new string[]{
+				"Welcome to the Game of Life!",
+				"Options",
+				"Press 1 for a randomly generated game",
+				"Press 2 to enter live cells",
+			});
 
 			var selectedOption = Console.ReadKey ();
             if (selectedOption.Key == ConsoleKey.D1)
@@ -35,14 +40,12 @@ namespace ConsoleApplication1
 			return new List<List<int>>();
         }
 
-		static void DisplayMainMenu ()
+		static void DisplayMenu (string[] menulines)
 		{
 			Console.Clear ();
 			var builder = new StringBuilder ();
-			builder.AppendLine ("Welcome to the Game of Life!")
-				.AppendLine ("Options")
-				.AppendLine ("Press 1 for a randomly generated game")
-				.AppendLine ("Press 2 to enter live cells");
+			foreach (var menuline in menulines)
+				builder.AppendLine (menuline);
 			
 			Console.WriteLine (builder);
 		}
@@ -60,11 +63,12 @@ namespace ConsoleApplication1
 
 		static List<List<int>> GetUserGeneratedCellPositions ()
 		{
-			var allCoordinates = new List<List<int>>();
-			Console.Clear ();
-			Console.WriteLine ("Enter coordinates of cells with X and Y values seperated by a comma, press s to finish!");
-			Console.WriteLine ("Press o to return to Options");
+			DisplayMenu(new string[]{
+				"Enter coordinates of cells with X and Y values seperated by a comma, press s to finish!",
+				"Press o to return to Options",
+			});
 
+			var allCoordinates = new List<List<int>>();
 			var sNotPressed = true;
 			while (sNotPressed) {
 				var inputValue = Console.ReadLine ();
