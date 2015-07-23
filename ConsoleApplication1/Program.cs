@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleApplication1
 {
@@ -25,7 +24,6 @@ namespace ConsoleApplication1
         static List<List<int>> generateLiveCells()
         {
 			var selectedOption = GetMainMenuUserSelection ();
-			
 
             if (selectedOption.Key == ConsoleKey.D1)
             {
@@ -60,10 +58,7 @@ namespace ConsoleApplication1
 			for (var count = 0; count <= numberOfLiveCells; count++) {
 				var yCoordinate = random.Next (80);
 				var xCoordinate = random.Next (40);
-				var coordinatePair = new List<int> {
-					yCoordinate,
-					xCoordinate
-				};
+				var coordinatePair = CreatePosition (yCoordinate, xCoordinate);
 				allCoordinates.Add (coordinatePair);
 			}
 			return allCoordinates;
@@ -90,15 +85,20 @@ namespace ConsoleApplication1
 						var commaSeperatedInput = cleansedInput.Split (',');
 						var xCoordinate = int.Parse (commaSeperatedInput [0]);
 						var yCoordinate = int.Parse (commaSeperatedInput [1]);
-						var coordinatePair = new List<int> {
-							xCoordinate,
-							yCoordinate
-						};
+						var coordinatePair = CreatePosition (yCoordinate, xCoordinate);
 						allCoordinates.Add (coordinatePair);
 						return allCoordinates;
 					}
 			}
 			return allCoordinates;
+		}
+
+		static List<int> CreatePosition (int yCoordinate, int xCoordinate)
+		{
+			return new List<int> {
+				yCoordinate,
+				xCoordinate
+			};
 		}
     }
 }
