@@ -40,12 +40,6 @@ namespace ConsoleApplication1
 			return new List<List<int>>();
         }
 
-		static void DisplayMenu (string[] menulines)
-		{
-			Console.Clear ();
-			Console.WriteLine (string.Join(Environment.NewLine, menulines));
-		}
-
 		static List<List<int>> AddRandomNumberOfRandomlyPositionedCells ()
 		{
 			var allCoordinates = new List<List<int>> ();
@@ -99,6 +93,12 @@ namespace ConsoleApplication1
 		static string NumbersOrCommasOnly (string inputValue)
 		{
 			return new string (inputValue.Where (character => char.IsNumber (character) || character == ',').ToArray ());
+		}
+
+		static void DisplayMenu (string[] menulines)
+		{
+			Console.Clear ();
+			Console.WriteLine (string.Join(Environment.NewLine, menulines));
 		}
     }
 }
