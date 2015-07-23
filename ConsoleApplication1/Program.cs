@@ -10,6 +10,18 @@ namespace ConsoleApplication1
     {
 		static Random random = new Random ();
 
+		static void Main(string[] args)
+		{
+			Console.Clear();
+			foreach (var item in generateLiveCells())
+			{
+				Console.SetCursorPosition(item[0], item[1]);
+				Console.Write("X");
+			}
+
+			Console.ReadKey();
+		}
+
         static List<List<int>> generateLiveCells()
         {
             Console.Clear();
@@ -68,20 +80,6 @@ namespace ConsoleApplication1
                 }
             }
             return allCoordinates;
-        }
-        static void Main(string[] args)
-        {
-            
-            Console.Clear();
-            foreach (var item in generateLiveCells())
-            {
-                Console.SetCursorPosition(item[0], item[1]);
-                Console.Write("X");
-            }
-
-            // Console.WriteLine(String.Format("{0} {1}", xCoordinate, yCoordinate));       
-            
-            Console.ReadKey();
         }
     }
 }
