@@ -43,11 +43,7 @@ namespace ConsoleApplication1
 		static void DisplayMenu (string[] menulines)
 		{
 			Console.Clear ();
-			var builder = new StringBuilder ();
-			foreach (var menuline in menulines)
-				builder.AppendLine (menuline);
-			
-			Console.WriteLine (builder);
+			Console.WriteLine (string.Join(Environment.NewLine, menulines));
 		}
 
 		static List<List<int>> AddRandomNumberOfRandomlyPositionedCells ()
