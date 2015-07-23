@@ -73,11 +73,11 @@ namespace ConsoleApplication1
 			var sNotPressed = true;
 			while (sNotPressed) {
 				var inputValue = Console.ReadLine ();
-				if (inputValue == "o" || inputValue == "O") {
+				if (inputValue.ToLower() == "o") {
 					return generateLiveCells ();
 				}
 				else
-					if (inputValue == "s" || inputValue == "S") {
+					if (inputValue.ToLower() == "s") {
 						sNotPressed = false;
 					}
 					else {
