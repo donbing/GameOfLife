@@ -33,18 +33,17 @@ namespace ConsoleApplication1
 			
             Console.WriteLine(builder);
 
-            var allCoordinates = new List<List<int>>();
-
             var selectedOption = Console.ReadKey();
             if (selectedOption.Key == ConsoleKey.D1)
             {
 				return AddRandomNumberOfRandomlyPositionedCells ();
-            }                
+            }
             if (selectedOption.Key == ConsoleKey.D2)
             {
 				return GetUserGeneratedCellPositions ();
             }
-            return allCoordinates;
+
+			return new List<List<int>>();
         }
 
 		static List<List<int>> AddRandomNumberOfRandomlyPositionedCells ()
