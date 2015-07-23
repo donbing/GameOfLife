@@ -8,6 +8,8 @@ namespace ConsoleApplication1
 {
     class Program
     {
+		static Random random = new Random ();
+
         static List<List<int>> generateLiveCells()
         {
             Console.Clear();
@@ -24,7 +26,6 @@ namespace ConsoleApplication1
             var selectedOption = Console.ReadKey();
             if (selectedOption.Key == ConsoleKey.D1)
             {
-                var random = new Random();
                 var numberOfLiveCells = random.Next(40, 50);
 
                 for (var count = 0; count <= numberOfLiveCells; count++)
