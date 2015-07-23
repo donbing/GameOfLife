@@ -81,9 +81,7 @@ namespace ConsoleApplication1
 						sNotPressed = false;
 					}
 					else {
-						var cleansedInput = NumbersOrCommasOnly (inputValue);
-						var commaSeperatedInput = cleansedInput.Split (',');
-						var coordinatePair = CreatePositionFrom (commaSeperatedInput[0],commaSeperatedInput[1]);
+						var coordinatePair = CreatePositionFromCrappyUserKeyedInput (inputValue);
 						allCoordinates.Add (coordinatePair);
 						return allCoordinates;
 					}
@@ -104,6 +102,13 @@ namespace ConsoleApplication1
 			var xCoordinate = int.Parse (xCoord);
 			var yCoordinate = int.Parse (yCoord);
 			return CreatePosition (yCoordinate, xCoordinate);
+		}
+
+		static List<int> CreatePositionFromCrappyUserKeyedInput (string inputValue)
+		{
+			var cleansedInput = NumbersOrCommasOnly (inputValue);
+			var commaSeperatedInput = cleansedInput.Split (',');
+			return CreatePositionFrom (commaSeperatedInput [0], commaSeperatedInput [1]);
 		}
 
 		static string NumbersOrCommasOnly (string inputValue)
