@@ -24,16 +24,9 @@ namespace ConsoleApplication1
 
         static List<List<int>> generateLiveCells()
         {
-            Console.Clear();
-            var builder = new StringBuilder();
-			builder.AppendLine("Welcome to the Game of Life!")
-				.AppendLine("Options")
-				.AppendLine("Press 1 for a randomly generated game")
-				.AppendLine("Press 2 to enter live cells");
+			var selectedOption = GetMainMenuUserSelection ();
 			
-            Console.WriteLine(builder);
 
-            var selectedOption = Console.ReadKey();
             if (selectedOption.Key == ConsoleKey.D1)
             {
 				return AddRandomNumberOfRandomlyPositionedCells ();
@@ -45,6 +38,20 @@ namespace ConsoleApplication1
 
 			return new List<List<int>>();
         }
+
+		static ConsoleKeyInfo GetMainMenuUserSelection ()
+		{
+			Console.Clear ();
+			var builder = new StringBuilder ();
+			builder.AppendLine ("Welcome to the Game of Life!")
+				.AppendLine ("Options")
+				.AppendLine ("Press 1 for a randomly generated game")
+				.AppendLine ("Press 2 to enter live cells");
+			
+			Console.WriteLine (builder);
+
+			return Console.ReadKey ();
+		}
 
 		static List<List<int>> AddRandomNumberOfRandomlyPositionedCells ()
 		{
