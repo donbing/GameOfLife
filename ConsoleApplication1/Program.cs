@@ -42,33 +42,7 @@ namespace ConsoleApplication1
             }                
             if (selectedOption.Key == ConsoleKey.D2)
             {
-                Console.Clear();
-                Console.WriteLine("Enter co ordinates of cells with X and Y values seperated by a comma, press s to finish!");
-                Console.WriteLine("Press o to return to Options");
-
-                var sNotPressed = true;
-                while (sNotPressed)
-                {
-                    var inputValue = Console.ReadLine();
-                    if (inputValue == "o" || inputValue == "O")
-                    {
-                        return generateLiveCells();
-                    }
-                    else if (inputValue == "s" || inputValue == "S")
-                    {
-                        sNotPressed = false;
-                    }
-                    else
-                    {
-                        var cleansedInput = new string (inputValue.Where(character => char.IsNumber(character) || character == ',').ToArray());
-
-                        var commaSeperatedInput = cleansedInput.Split(',');
-                        var xCoordinate = int.Parse(commaSeperatedInput[0]);
-                        var yCoordinate = int.Parse(commaSeperatedInput[1]);
-                        var coordinatePair = new List<int> { xCoordinate, yCoordinate };
-                        allCoordinates.Add(coordinatePair);
-                    }
-                }
+				return GetUserGeneratedCellPositions ();
             }
             return allCoordinates;
         }
@@ -85,6 +59,38 @@ namespace ConsoleApplication1
 					xCoordinate
 				};
 				allCoordinates.Add (coordinatePair);
+			}
+			return allCoordinates;
+		}
+
+		static List<List<int>> GetUserGeneratedCellPositions ()
+		{
+			var allCoordinates = new List<List<int>>();
+			Console.Clear ();
+			Console.WriteLine ("Enter co ordinates of cells with X and Y values seperated by a comma, press s to finish!");
+			Console.WriteLine ("Press o to return to Options");
+			var sNotPressed = true;
+			while (sNotPressed) {
+				var inputValue = Console.ReadLine ();
+				if (inputValue == "o" || inputValue == "O") {
+					return generateLiveCells ();
+				}
+				else
+					if (inputValue == "s" || inputValue == "S") {
+						sNotPressed = false;
+					}
+					else {
+						var cleansedInput = new string (inputValue.Where (character => char.IsNumber (character) || character == ',').ToArray ());
+						var commaSeperatedInput = cleansedInput.Split (',');
+						var xCoordinate = int.Parse (commaSeperatedInput [0]);
+						var yCoordinate = int.Parse (commaSeperatedInput [1]);
+						var coordinatePair = new List<int> {
+							xCoordinate,
+							yCoordinate
+						};
+						allCoordinates.Add (coordinatePair);
+						return allCoordinates;
+					}
 			}
 			return allCoordinates;
 		}
