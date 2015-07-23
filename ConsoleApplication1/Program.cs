@@ -8,10 +8,10 @@ namespace ConsoleApplication1
     class Program
     {
 		static Random random = new Random ();
+		static int width = 80, height = 40;
 
 		static void Main(string[] args)
 		{
-			Console.Clear();
 			foreach (var item in generateLiveCells())
 			{
 				Console.SetCursorPosition(item[0], item[1]);
@@ -26,13 +26,10 @@ namespace ConsoleApplication1
 			var selectedOption = GetMainMenuUserSelection ();
 
             if (selectedOption.Key == ConsoleKey.D1)
-            {
 				return AddRandomNumberOfRandomlyPositionedCells ();
-            }
+            
             if (selectedOption.Key == ConsoleKey.D2)
-            {
 				return GetUserGeneratedCellPositions ();
-            }
 
 			return new List<List<int>>();
         }
@@ -56,9 +53,7 @@ namespace ConsoleApplication1
 			var allCoordinates = new List<List<int>> ();
 			var numberOfLiveCells = random.Next (40, 50);
 			for (var count = 0; count <= numberOfLiveCells; count++) {
-				var yCoordinate = random.Next (80);
-				var xCoordinate = random.Next (40);
-				var coordinatePair = CreatePosition (yCoordinate, xCoordinate);
+				var coordinatePair = CreatePosition (random.Next (width), random.Next (height));
 				allCoordinates.Add (coordinatePair);
 			}
 			return allCoordinates;
@@ -68,7 +63,7 @@ namespace ConsoleApplication1
 		{
 			var allCoordinates = new List<List<int>>();
 			Console.Clear ();
-			Console.WriteLine ("Enter co ordinates of cells with X and Y values seperated by a comma, press s to finish!");
+			Console.WriteLine ("Enter coordinates of cells with X and Y values seperated by a comma, press s to finish!");
 			Console.WriteLine ("Press o to return to Options");
 
 			var sNotPressed = true;
@@ -93,24 +88,13 @@ namespace ConsoleApplication1
 
 		static List<int> CreatePosition (int yCoordinate, int xCoordinate)
 		{
-			return new List<int> {
-				yCoordinate,
-				xCoordinate
-			};
-		}
-
-		static List<int> CreatePositionFrom (string xCoord, string yCoord)
-		{
-			var xCoordinate = int.Parse (xCoord);
-			var yCoordinate = int.Parse (yCoord);
-			return CreatePosition (yCoordinate, xCoordinate);
+			return new List<int> {yCoordinate,xCoordinate};
 		}
 
 		static List<int> CreatePositionFromCrappyUserKeyedInput (string inputValue)
 		{
-			var cleansedInput = NumbersOrCommasOnly (inputValue);
-			var commaSeperatedInput = cleansedInput.Split (',');
-			return CreatePositionFrom (commaSeperatedInput [0], commaSeperatedInput [1]);
+			var commaSeperatedInput = NumbersOrCommasOnly (inputValue).Split (',');
+			return CreatePosition (int.Parse (commaSeperatedInput [0]), int.Parse (commaSeperatedInput [1]));
 		}
 
 		static string NumbersOrCommasOnly (string inputValue)
