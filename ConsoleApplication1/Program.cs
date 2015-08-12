@@ -2,9 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace ConsoleApplication1
 {
+    class Cell
+    {
+        public int x;
+        public int y;
+    }
+
     class Program
     {
 		static Random random = new Random ();
@@ -12,16 +19,62 @@ namespace ConsoleApplication1
 
 		static void Main(string[] args)
 		{
-			foreach (var item in generateLiveCells())
-			{
-				Console.SetCursorPosition(item[0], item[1]);
-				Console.Write("X");
-			}
+		    var liveCells = GenerateLiveCells();
+            var newGeneration = new List<Cell>();
+            DrawCells(liveCells);
 
-			Console.ReadKey();
+            var offSets = new[]
+            {
+                    Tuple.Create(-1,-1),
+                    Tuple.Create(-1,0),
+                    Tuple.Create(-1,+1),
+                    Tuple.Create(0,-1),
+                    Tuple.Create(0,-1),
+                    Tuple.Create(+1,-1),
+                    Tuple.Create(+1,0),
+                    Tuple.Create(+1,+1),
+            };
+
+            foreach (var cell in liveCells)
+		    {
+		        var count = 0;
+		        foreach (var offSet in offSets)
+		        {
+		            var newX = cell.x + offSet.Item1;
+		            var newY = cell.y + offSet.Item2;
+
+		            var newCell = CreatePosition (newY, newX);
+
+		            if (liveCells.Contains(newCell))
+		            {
+		                count++;
+		            }
+		        }
+               
+		        if (count == 2 || count == 3)
+		        {
+		            newGeneration.Add(cell);
+		        }
+                
+            }
+            Thread.Sleep(5000);
+
+            DrawCells(newGeneration);
+
+            Console.ReadKey();
 		}
 
-        static List<List<int>> generateLiveCells()
+        private static void DrawCells(List<Cell> liveCells)
+        {
+            Console.Clear();
+            foreach (var cell in liveCells)
+            {
+                Console.SetCursorPosition(cell.x, cell.y);
+                Console.Write("X");
+            }
+        }
+
+        static List<Cell> GenerateLiveCells()
         {
 			DisplayMenu (new string[]{
 				"Welcome to the Game of Life!",
@@ -31,18 +84,19 @@ namespace ConsoleApplication1
 			});
 
 			var selectedOption = Console.ReadKey ();
+
             if (selectedOption.Key == ConsoleKey.D1)
 				return AddRandomNumberOfRandomlyPositionedCells ();
-            
-            if (selectedOption.Key == ConsoleKey.D2)
-				return GetUserGeneratedCellPositions ();
 
-			return new List<List<int>>();
+            if (selectedOption.Key == ConsoleKey.D2)
+                return GetUserGeneratedCellPositions ();
+
+			return new List<Cell>();
         }
 
-		static List<List<int>> AddRandomNumberOfRandomlyPositionedCells ()
+		static List<Cell> AddRandomNumberOfRandomlyPositionedCells ()
 		{
-			var allCoordinates = new List<List<int>> ();
+			var allCoordinates = new List<Cell> ();
 			var numberOfLiveCells = random.Next (40, 50);
 			for (var count = 0; count <= numberOfLiveCells; count++) {
 				var coordinatePair = CreatePosition (random.Next (width), random.Next (height));
@@ -51,21 +105,21 @@ namespace ConsoleApplication1
 			return allCoordinates;
 		}
 
-		static List<List<int>> GetUserGeneratedCellPositions ()
+		static List<Cell> GetUserGeneratedCellPositions ()
 		{
 			DisplayMenu(new string[]{
 				"Enter coordinates of cells with X and Y values seperated by a comma, press s to finish!",
 				"Press o to return to Options",
 			});
 
-			var allCoordinates = new List<List<int>>();
+			var allCoordinates = new List<Cell>();
 			var sNotPressed = true;
 			while (sNotPressed) {
 				var inputValue = Console.ReadLine ();
 
 				switch (inputValue.ToLower()) {
 					case "o":
-						return generateLiveCells ();
+						return GenerateLiveCells ();
 					case "s":
 						sNotPressed = false;
 						break;
@@ -79,12 +133,12 @@ namespace ConsoleApplication1
 			return allCoordinates;
 		}
 
-		static List<int> CreatePosition (int yCoordinate, int xCoordinate)
+		static Cell CreatePosition (int yCoordinate, int xCoordinate)
 		{
-			return new List<int> {yCoordinate,xCoordinate};
+			return new Cell {x=xCoordinate, y=yCoordinate};
 		}
 
-		static List<int> CreatePositionFromCrappyUserKeyedInput (string inputValue)
+		static Cell CreatePositionFromCrappyUserKeyedInput (string inputValue)
 		{
 			var commaSeperatedInput = NumbersOrCommasOnly (inputValue).Split (',');
 			return CreatePosition (int.Parse (commaSeperatedInput [0]), int.Parse (commaSeperatedInput [1]));
