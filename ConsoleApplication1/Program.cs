@@ -6,12 +6,6 @@ using System.Threading;
 
 namespace ConsoleApplication1
 {
-    class Cell
-    {
-        public int x;
-        public int y;
-    }
-
     class Program
     {
 		static Random random = new Random ();
@@ -19,58 +13,89 @@ namespace ConsoleApplication1
 
 		static void Main(string[] args)
 		{
-		    var liveCells = GenerateLiveCells();
+		    var liveCells = GenerateLiveCells().ToList();
             var newGeneration = new List<Cell>();
             DrawCells(liveCells);
-
-            var offSets = new[]
-            {
-                    Tuple.Create(-1,-1),
-                    Tuple.Create(-1,0),
-                    Tuple.Create(-1,+1),
-                    Tuple.Create(0,-1),
-                    Tuple.Create(0,-1),
-                    Tuple.Create(+1,-1),
-                    Tuple.Create(+1,0),
-                    Tuple.Create(+1,+1),
-            };
-
-            foreach (var cell in liveCells)
+		    while (true)
 		    {
-		        var count = 0;
-		        foreach (var offSet in offSets)
+
+
+		        var offSets = new[]
 		        {
-		            var newX = cell.x + offSet.Item1;
-		            var newY = cell.y + offSet.Item2;
+		            Tuple.Create(-1, -1),
+		            Tuple.Create(-1, 0),
+		            Tuple.Create(-1, +1),
+		            Tuple.Create(0, -1),
+		            Tuple.Create(0, +1),
+		            Tuple.Create(+1, -1),
+		            Tuple.Create(+1, 0),
+		            Tuple.Create(+1, +1),
+		        };
 
-		            var newCell = CreatePosition (newY, newX);
+		        GetValue(liveCells, offSets, newGeneration);
 
-		            if (liveCells.Contains(newCell))
-		            {
-		                count++;
-		            }
-		        }
-               
-		        if (count == 2 || count == 3)
-		        {
-		            newGeneration.Add(cell);
-		        }
-                
-            }
-            Thread.Sleep(5000);
-
-            DrawCells(newGeneration);
-
-            Console.ReadKey();
+		        Thread.Sleep(800);
+		        liveCells = newGeneration;
+		        DrawCells(newGeneration);
+		    }
+		    Console.ReadKey();
 		}
+
+        private static void GetValue(List<Cell> liveCells, Tuple<int, int>[] offSets, List<Cell> newGeneration)
+        {
+            foreach (var cell in liveCells)
+            {
+                // find all the neighbours of the current cell.
+                // count now many of those neighbours are alive.
+                // if it's 2 or 3 thencreate a live cell at our curren cells position in the next generation.
+                var liveCellNeighbours = offSets
+                    .Select(offSet => Cell.CreatePosition(cell.Y + offSet.Item2, cell.X + offSet.Item1));
+
+                var count = liveCellNeighbours.Count(newCell => liveCells.Contains(newCell));
+
+                if (count == 2 || count == 3)
+                {
+                    newGeneration.Add(cell);
+                }
+
+                foreach (var neighbour in liveCellNeighbours)
+                {
+                    var neighbourCellNeighbours = offSets
+                        .Select(offSet => Cell.CreatePosition(neighbour.Y + offSet.Item2, neighbour.X + offSet.Item1));
+
+                    // count the neighbourneighbours that are alive
+                    var countOfLiveNeighbours = neighbourCellNeighbours.Count(newCell => liveCells.Contains(newCell));
+
+                    // work out if this neighbour is alive/dead
+                    var isAlive = liveCells.Contains(neighbour);
+
+                    // ignore this cell if the neighbour is alive.
+                    if (isAlive == false)
+                    {
+                        // if count of live neighbours is exactly 3
+                        if (countOfLiveNeighbours == 3)
+                        {
+                            // then add cell to next generation
+                            newGeneration.Add(neighbour);
+                        }
+                    }
+                }
+
+
+                // go thru each of the neighbours and do the same.
+            }
+        }
 
         private static void DrawCells(List<Cell> liveCells)
         {
             Console.Clear();
             foreach (var cell in liveCells)
             {
-                Console.SetCursorPosition(cell.x, cell.y);
-                Console.Write("X");
+                if ((cell.X >= 0) && (cell.Y >= 0) && (cell.X <width) && (cell.Y <height))
+                {
+                    Console.SetCursorPosition(cell.X, cell.Y);
+                  Console.Write("X");
+                }
             }
         }
 
@@ -97,9 +122,9 @@ namespace ConsoleApplication1
 		static List<Cell> AddRandomNumberOfRandomlyPositionedCells ()
 		{
 			var allCoordinates = new List<Cell> ();
-			var numberOfLiveCells = random.Next (40, 50);
+			var numberOfLiveCells = random.Next (800,1000 );
 			for (var count = 0; count <= numberOfLiveCells; count++) {
-				var coordinatePair = CreatePosition (random.Next (width), random.Next (height));
+				var coordinatePair = Cell.CreatePosition (random.Next (height), random.Next(width));
 				allCoordinates.Add (coordinatePair);
 			}
 			return allCoordinates;
@@ -133,15 +158,10 @@ namespace ConsoleApplication1
 			return allCoordinates;
 		}
 
-		static Cell CreatePosition (int yCoordinate, int xCoordinate)
-		{
-			return new Cell {x=xCoordinate, y=yCoordinate};
-		}
-
-		static Cell CreatePositionFromCrappyUserKeyedInput (string inputValue)
+        static Cell CreatePositionFromCrappyUserKeyedInput (string inputValue)
 		{
 			var commaSeperatedInput = NumbersOrCommasOnly (inputValue).Split (',');
-			return CreatePosition (int.Parse (commaSeperatedInput [0]), int.Parse (commaSeperatedInput [1]));
+			return Cell.CreatePosition (int.Parse (commaSeperatedInput [0]), int.Parse (commaSeperatedInput [1]));
 		}
 
 		static string NumbersOrCommasOnly (string inputValue)
