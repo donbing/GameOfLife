@@ -18,8 +18,6 @@ namespace ConsoleApplication1
             DrawCells(liveCells);
 		    while (true)
 		    {
-
-
 		        var offSets = new[]
 		        {
 		            Tuple.Create(-1, -1),
@@ -38,7 +36,6 @@ namespace ConsoleApplication1
 		        liveCells = newGeneration;
 		        DrawCells(newGeneration);
 		    }
-		    Console.ReadKey();
 		}
 
         private static void GetValue(List<Cell> liveCells, Tuple<int, int>[] offSets, List<Cell> newGeneration)
@@ -80,8 +77,7 @@ namespace ConsoleApplication1
                         }
                     }
                 }
-
-
+                
                 // go thru each of the neighbours and do the same.
             }
         }
