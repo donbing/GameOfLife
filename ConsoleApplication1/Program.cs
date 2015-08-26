@@ -9,76 +9,38 @@ namespace ConsoleApplication1
     class Program
     {
 		static Random random = new Random ();
-		static int width = 80, height = 40;
+		static int width = Console.WindowWidth, height = Console.WindowHeight;
 
-		static void Main(string[] args)
-		{
-		    var liveCells = GenerateLiveCells().ToList();
-            var newGeneration = new List<Cell>();
-            DrawCells(liveCells);
-		    while (true)
-		    {
-		        var offSets = new[]
-		        {
-		            Tuple.Create(-1, -1),
-		            Tuple.Create(-1, 0),
-		            Tuple.Create(-1, +1),
-		            Tuple.Create(0, -1),
-		            Tuple.Create(0, +1),
-		            Tuple.Create(+1, -1),
-		            Tuple.Create(+1, 0),
-		            Tuple.Create(+1, +1),
-		        };
-
-		        GetValue(liveCells, offSets, newGeneration);
-
-		        Thread.Sleep(800);
-		        liveCells = newGeneration;
-		        DrawCells(newGeneration);
-		    }
-		}
-
-        private static void GetValue(List<Cell> liveCells, Tuple<int, int>[] offSets, List<Cell> newGeneration)
+        private static void Main(string[] args)
         {
-            foreach (var cell in liveCells)
+
+
+            var liveCells = GenerateLiveCells().ToList();
+            DrawCells(liveCells);
+            var allTheTimes = new List<TimeSpan>();
+            while (true)
             {
-                // find all the neighbours of the current cell.
-                // count now many of those neighbours are alive.
-                // if it's 2 or 3 thencreate a live cell at our curren cells position in the next generation.
-                var liveCellNeighbours = offSets
-                    .Select(offSet => Cell.CreatePosition(cell.Y + offSet.Item2, cell.X + offSet.Item1));
-
-                var count = liveCellNeighbours.Count(newCell => liveCells.Contains(newCell));
-
-                if (count == 2 || count == 3)
+                var keyPress = Console.ReadKey(true).Key;
+                
+                if (  keyPress != ConsoleKey.Escape)
                 {
-                    newGeneration.Add(cell);
+                    var newGeneration = new List<Cell>();
+                    var currentTime = DateTime.Now;
+                    NextGenerationCreator.MakeNextGeneration(liveCells, newGeneration);
+                    var timeToMakeEachGeneration = DateTime.Now - currentTime;
+                    allTheTimes.Add(timeToMakeEachGeneration);
+                    Thread.Sleep(800);
+                    liveCells = newGeneration;
+                    DrawCells(newGeneration);
                 }
-
-                foreach (var neighbour in liveCellNeighbours)
+                else
                 {
-                    var neighbourCellNeighbours = offSets
-                        .Select(offSet => Cell.CreatePosition(neighbour.Y + offSet.Item2, neighbour.X + offSet.Item1));
-
-                    // count the neighbourneighbours that are alive
-                    var countOfLiveNeighbours = neighbourCellNeighbours.Count(newCell => liveCells.Contains(newCell));
-
-                    // work out if this neighbour is alive/dead
-                    var isAlive = liveCells.Contains(neighbour);
-
-                    // ignore this cell if the neighbour is alive.
-                    if (isAlive == false)
+                    foreach (var time in allTheTimes)
                     {
-                        // if count of live neighbours is exactly 3
-                        if (countOfLiveNeighbours == 3)
-                        {
-                            // then add cell to next generation
-                            newGeneration.Add(neighbour);
-                        }
+                        Console.WriteLine(time);
                     }
                 }
-                
-                // go thru each of the neighbours and do the same.
+
             }
         }
 
@@ -102,6 +64,7 @@ namespace ConsoleApplication1
 				"Options",
 				"Press 1 for a randomly generated game",
 				"Press 2 to enter live cells",
+                "Press 3 for a glider"
 			});
 
 			var selectedOption = Console.ReadKey ();
@@ -111,14 +74,29 @@ namespace ConsoleApplication1
 
             if (selectedOption.Key == ConsoleKey.D2)
                 return GetUserGeneratedCellPositions ();
+            if (selectedOption.Key == ConsoleKey.D3)
+                return GetGliderCellPositions();
 
-			return new List<Cell>();
+            return new List<Cell>();
         }
 
-		static List<Cell> AddRandomNumberOfRandomlyPositionedCells ()
+        private static List<Cell> GetGliderCellPositions()
+        {
+            var gliderCoordinates = new List<Cell>
+            {
+                Cell.CreatePosition(2,0),
+                Cell.CreatePosition(2,1),
+                Cell.CreatePosition(2,2),
+                Cell.CreatePosition(1,2),
+                Cell.CreatePosition(0,1),
+            };
+            return gliderCoordinates;
+        }
+
+        static List<Cell> AddRandomNumberOfRandomlyPositionedCells ()
 		{
 			var allCoordinates = new List<Cell> ();
-			var numberOfLiveCells = random.Next (800,1000 );
+			var numberOfLiveCells = random.Next (600,800);
 			for (var count = 0; count <= numberOfLiveCells; count++) {
 				var coordinatePair = Cell.CreatePosition (random.Next (height), random.Next(width));
 				allCoordinates.Add (coordinatePair);
