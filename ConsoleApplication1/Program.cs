@@ -13,38 +13,34 @@ namespace ConsoleApplication1
 
         private static void Main(string[] args)
         {
-
-
-            var liveCells = GenerateLiveCells().ToList();
+            var liveCells = new HashSet<Cell>(GenerateLiveCells()); 
             DrawCells(liveCells);
             var allTheTimes = new List<TimeSpan>();
             while (true)
             {
-                var keyPress = Console.ReadKey(true).Key;
-                
-                if (  keyPress != ConsoleKey.Escape)
-                {
-                    var newGeneration = new List<Cell>();
-                    var currentTime = DateTime.Now;
-                    NextGenerationCreator.MakeNextGeneration(liveCells, newGeneration);
-                    var timeToMakeEachGeneration = DateTime.Now - currentTime;
-                    allTheTimes.Add(timeToMakeEachGeneration);
+               // var keyPress = Console.ReadKey(true).Key;
+               // if (  keyPress != ConsoleKey.Escape)
+               // {
+                  var newGeneration = new HashSet<Cell>();
+               // var currentTime = DateTime.Now;
+                   NextGenerationCreator.MakeNextGeneration(liveCells, newGeneration);
+               // var timeToMakeEachGeneration = DateTime.Now - currentTime;
+               // allTheTimes.Add(timeToMakeEachGeneration);
                     Thread.Sleep(800);
                     liveCells = newGeneration;
                     DrawCells(newGeneration);
-                }
-                else
-                {
-                    foreach (var time in allTheTimes)
-                    {
-                        Console.WriteLine(time);
-                    }
-                }
-
+              //  }
+              //  else
+              // {
+              //     foreach (var time in allTheTimes)
+              //     {
+              //        Console.WriteLine(time);
+              //    }
+              // }
             }
         }
 
-        private static void DrawCells(List<Cell> liveCells)
+        private static void DrawCells(HashSet<Cell> liveCells)
         {
             Console.Clear();
             foreach (var cell in liveCells)
@@ -76,8 +72,7 @@ namespace ConsoleApplication1
                 return GetUserGeneratedCellPositions ();
             if (selectedOption.Key == ConsoleKey.D3)
                 return GetGliderCellPositions();
-
-            return new List<Cell>();
+                return new List<Cell>();
         }
 
         private static List<Cell> GetGliderCellPositions()
